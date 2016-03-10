@@ -1,0 +1,6 @@
+pipeline:
+    - job:
+        script:
+            - npm install -g mocha
+            - npm install
+            - npm test
