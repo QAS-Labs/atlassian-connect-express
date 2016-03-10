@@ -18,7 +18,7 @@ describe('Webhook', function () {
 
     before(function (done) {
         ac.store.register("teststore", function (logger, opts) {
-            return require("../lib/store/jugglingdb")(logger, opts);
+            return require("../lib/store/sequelize")(logger, opts);
         });
 
         app.set('env', 'development');
@@ -33,7 +33,8 @@ describe('Webhook', function () {
                 development: {
                     store: {
                         adapter: 'teststore',
-                        type: "memory"
+                        type: 'sqlite',
+                        storage: ':memory:'
                     },
                     hosts: [ installedPayload.baseUrl ]
                 }

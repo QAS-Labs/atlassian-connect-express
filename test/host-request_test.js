@@ -17,6 +17,7 @@ describe('Host Request', function () {
 
     before(function (done) {
         app.set('env', 'development');
+        process.env.AC_OPTS = 'no-reg';
         app.use(express.urlencoded());
         app.use(express.json());
 
@@ -59,7 +60,7 @@ describe('Host Request', function () {
                     store: {
                         adapter: 'teststore',
                         type: "sqlite",
-                        storage: "memory"
+                        storage: './test.db'
                     },
                     "hosts": [
                         helper.productBaseUrl
@@ -68,7 +69,9 @@ describe('Host Request', function () {
             }
         }, logger);
         server = http.createServer(app).listen(helper.addonPort, function () {
-            addon.register().then(done);
+            addon.register().then(function () {
+                done();
+            });
         });
 
         var settings = {
@@ -108,6 +111,8 @@ describe('Host Request', function () {
         httpClient.get('/some/path/on/host').then(function(request) {
             assert.ok(request.headers);
             done();
+        }, function (request) {
+            throw "failed";
         });
     });
 

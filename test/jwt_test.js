@@ -59,7 +59,7 @@ describe('JWT', function () {
                     store: {
                         adapter: 'teststore',
                         type: 'sqlite',
-                        storage: 'memory'
+                        storage: ':memory:'
                     },
                     "hosts": [
                         helper.productBaseUrl

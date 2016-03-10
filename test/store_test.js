@@ -19,7 +19,7 @@ describe('Store', function () {
     var storeDelSpy;
 
     before(function (done) {
-        process.env.AC_OPTS = 'no-auth';
+        process.env.AC_OPTS = 'no-auth no-reg';
         app.set('env', 'development');
         app.use(express.urlencoded());
         app.use(express.json());
@@ -61,7 +61,8 @@ describe('Store', function () {
                 development: {
                     store: {
                         adapter: "teststore",
-                        type: "memory"
+                        type: 'sqlite',
+                        storage: ':memory:'
                     },
                     hosts: [ helper.productBaseUrl ]
                 }
