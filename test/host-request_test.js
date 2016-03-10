@@ -17,7 +17,6 @@ describe('Host Request', function () {
 
     before(function (done) {
         app.set('env', 'development');
-        process.env.AC_OPTS = 'no-reg';
         app.use(express.urlencoded());
         app.use(express.json());
 
@@ -59,8 +58,7 @@ describe('Host Request', function () {
                 "development": {
                     store: {
                         adapter: 'teststore',
-                        type: "sqlite",
-                        storage: './test.db'
+                        type: "sqlite"
                     },
                     "hosts": [
                         helper.productBaseUrl
