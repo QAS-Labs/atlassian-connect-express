@@ -6,7 +6,6 @@ var app = express();
 var ac = require('../index');
 var request = require('request');
 var RSVP = require('rsvp');
-var Schema = require('jugglingdb').Schema;
 var logger = require('./logger');
 var spy = require("sinon").spy;
 var addon = {};
@@ -50,11 +49,11 @@ describe('Store', function () {
         });
 
         ac.store.register("teststore", function (logger, opts) {
-            var JugglingDB = require("../lib/store/jugglingdb")();
-            storeGetSpy = spy(JugglingDB.prototype, "get");
-            storeSetSpy = spy(JugglingDB.prototype, "set");
-            storeDelSpy = spy(JugglingDB.prototype, "del");
-            return new JugglingDB(logger, opts);
+            var Sequelize = require("../lib/store/sequelize")();
+            storeGetSpy = spy(Sequelize.prototype, "get");
+            storeSetSpy = spy(Sequelize.prototype, "set");
+            storeDelSpy = spy(Sequelize.prototype, "del");
+            return new Sequelize(logger, opts);
         });
 
         addon = ac(app, {

@@ -117,14 +117,14 @@ The `./config.json` file contains all of the settings for the add-on server. Thi
         // This is the port your Express server will listen on
         "port": 3000,
 
-        // atlassian-connect-express currently integrates with JugglingDB for persistence
+        // atlassian-connect-express currently integrates with Sequelize for persistence
         // to store the host client information (i.e., client key, host public
-        // key, etc). When no adapter is specified, it defaults to JugglingDB's
-        // fallback memory storage.
+        // key, etc). When no adapter is specified, it defaults to Sequelize's
+        // sqlite storage.
         //
-        // To specify a backend for JugglingDB other than "memory", set the
-        // "type" value to one of Juggling's other supported types.  See
-        // https://github.com/1602/jugglingdb for more information.
+        // To specify a backend for Sequelize other than "sqlite", set the
+        // "type" value to one of Sequelize's other supported types.  See
+        // http://docs.sequelizejs.com/ for more information.
         //
         // To use your own storage adapter, add the key
         // "adapter" to the following configuration, and replace "type" and
@@ -134,34 +134,34 @@ The `./config.json` file contains all of the settings for the add-on server. Thi
         //
         //   ac.store.register(adapterName, factoryFn)
         //
-        // See atlassian-connect-express/lib/store/index.js and the default jugglingdb.js
+        // See atlassian-connect-express/lib/store/index.js and the default sequelize.js
         // files for code demonstrating how to write a conformant adapter.  The
         // default values are as follows:
         //
         //   "store": {
-        //     "adapter": "jugglingdb",
-        //     "type": "memory"
+        //     "adapter": "sequelize",
+        //     "type": "sqlite"
         //   },
         //
         // To instead configure, say, a PostgreSQL store, the following could be
         // used:
         //
         //   "store": {
-        //     "adapter": "jugglingdb",
+        //     "adapter": "sequelize",
         //     "type": "postgres",
         //     "url": "postgres://localhost/my_addon_database"
         //   },
         //
-        // You will also need an appropriate JugglingDB driver if you choose something
+        // You will also need an appropriate Sequelize driver if you choose something
         // other than the default "type".  In the PostgreSQL case you'd need to
         // run the following command to add the proper support:
         //
-        //   $ npm install -S jugglingdb-postgres
+        //   $ npm install -S pg
 
-        // If you are running provided container like Heroku you should add the
+        // If you are running in a provided container like Heroku you should add the
         // appropriate dependency to your package.json  file:
         //  "dependencies": {
-        //    "jugglingdb-postgres": "0.0.4"
+        //    "pg": "^4.5.1"
         //  }
         //
         // Your add-on will be registered with the following hosts upon startup.
@@ -189,7 +189,7 @@ The `./config.json` file contains all of the settings for the add-on server. Thi
           // You won't want to use the memory store in production, or your install
           // registrations will be forgotten any time your app restarts.  Here
           // we tell atlassian-connect-express to use the PostgreSQL backend for the default
-          // JugglingDB adapter.
+          // Sequelize adapter.
           "type": "postgres",
           // Again, a PaaS host like Heroku will probably provide the db connection
           // URL to you through the environment, so we tell atlassian-connect-express to use that value.
