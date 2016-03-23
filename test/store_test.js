@@ -89,79 +89,79 @@ describe('Store', function () {
         });
     });
 
-    // it('should return a list of clientInfo objects', function (done) {
-    //     addon.settings.getAllClientInfos().then(function (initialClientInfos) {
-    //         addon.settings.set('clientInfo', '{"correctPayload":true}', 'fake').then(function() {
-    //             addon.settings.getAllClientInfos().then(function (clientInfos) {
-    //                 assert.equal(clientInfos.length, initialClientInfos.length + 1);
-    //                 var latestClientInfo = clientInfos[clientInfos.length - 1];
-    //                 var correctPayload = latestClientInfo['correctPayload'];
-    //                 assert.equal(correctPayload, true);
-    //                 done();
-    //             });
-    //         });
-    //     });
-    // });
+    it('should return a list of clientInfo objects', function (done) {
+        addon.settings.getAllClientInfos().then(function (initialClientInfos) {
+            addon.settings.set('clientInfo', '{"correctPayload":true}', 'fake').then(function() {
+                addon.settings.getAllClientInfos().then(function (clientInfos) {
+                    assert.equal(clientInfos.length, initialClientInfos.length + 1);
+                    var latestClientInfo = clientInfos[clientInfos.length - 1];
+                    var correctPayload = latestClientInfo['correctPayload'];
+                    assert.equal(correctPayload, true);
+                    done();
+                });
+            });
+        });
+    });
 
-    // it('should allow storing arbitrary key/values', function (done) {
-    //     addon.settings.set('arbitrarySetting', 'someValue', helper.installedPayload.clientKey).then(function (setting) {
-    //         assert.equal(setting, 'someValue');
-    //         done();
-    //     })
-    // });
+    it('should allow storing arbitrary key/values', function (done) {
+        addon.settings.set('arbitrarySetting', 'someValue', helper.installedPayload.clientKey).then(function (setting) {
+            assert.equal(setting, 'someValue');
+            done();
+        })
+    });
 
-    // it('should allow storing arbitrary key/values as JSON', function (done) {
-    //     addon.settings.set('arbitrarySetting2', {data: 1}, helper.installedPayload.clientKey).then(function (setting) {
-    //         assert.deepEqual(setting, {data: 1});
-    //         done();
-    //     })
-    // });
+    it('should allow storing arbitrary key/values as JSON', function (done) {
+        addon.settings.set('arbitrarySetting2', {data: 1}, helper.installedPayload.clientKey).then(function (setting) {
+            assert.deepEqual(setting, {data: 1});
+            done();
+        })
+    });
 
-    // it('should allow storage of arbitrary models', function (done) {
-    //     addon.schema.extend('User', {
-    //         name: String,
-    //         email: String,
-    //         bio: Schema.JSON
-    //     }).then(
-    //             function (User) {
-    //                 User.create({
-    //                     name: "Rich",
-    //                     email: "rich@example.com",
-    //                     bio: {
-    //                         description: "Male 6' tall",
-    //                         favoriteColors: [
-    //                             "blue",
-    //                             "green"
-    //                         ]
-    //                     }
-    //                 }, function (err, model) {
-    //                     assert.equal(model.name, "Rich");
-    //                     User.all({ name: "Rich" }, function (err, user) {
-    //                         assert.equal(user[0].name, model.name);
-    //                         done();
-    //                     });
-    //                 });
-    //             },
-    //             function (err) {
-    //                 assert.fail(err.toString());
-    //             }
-    //     );
-    // });
+    it('should allow storage of arbitrary models', function (done) {
+        addon.schema.extend('User', {
+            name: String,
+            email: String,
+            bio: Schema.JSON
+        }).then(
+                function (User) {
+                    User.create({
+                        name: "Rich",
+                        email: "rich@example.com",
+                        bio: {
+                            description: "Male 6' tall",
+                            favoriteColors: [
+                                "blue",
+                                "green"
+                            ]
+                        }
+                    }, function (err, model) {
+                        assert.equal(model.name, "Rich");
+                        User.all({ name: "Rich" }, function (err, user) {
+                            assert.equal(user[0].name, model.name);
+                            done();
+                        });
+                    });
+                },
+                function (err) {
+                    assert.fail(err.toString());
+                }
+        );
+    });
 
-    // it('should work with a custom store', function (done) {
-    //     var promises = [
-    //         addon.settings.set('custom key', 'custom value'),
-    //         addon.settings.get('custom key'),
-    //         addon.settings.del('custom key')
-    //     ];
-    //     RSVP.all(promises).then(function () {
-    //         assert.ok(storeSetSpy.callCount > 0);
-    //         assert.ok(storeGetSpy.callCount > 0);
-    //         assert.ok(storeDelSpy.callCount > 0);
-    //         done();
-    //     }, function (err) {
-    //         assert.fail(err);
-    //     });
-    // });
+    it('should work with a custom store', function (done) {
+        var promises = [
+            addon.settings.set('custom key', 'custom value'),
+            addon.settings.get('custom key'),
+            addon.settings.del('custom key')
+        ];
+        RSVP.all(promises).then(function () {
+            assert.ok(storeSetSpy.callCount > 0);
+            assert.ok(storeGetSpy.callCount > 0);
+            assert.ok(storeDelSpy.callCount > 0);
+            done();
+        }, function (err) {
+            assert.fail(err);
+        });
+    });
 
 });
