@@ -6,8 +6,9 @@ var app = express();
 var ac = require('../index');
 var request = require('request');
 var moment = require('moment');
-var jwt = require('../lib/internal/jwt');
+var jwt = require('atlassian-jwt');
 var logger = require('./logger');
+var _ = require('lodash');
 
 var addon = {};
 
@@ -39,8 +40,7 @@ describe('Token verification', function () {
                     },
                     "hosts": [
                         helper.productBaseUrl
-                    ],
-                    "validatePublicKey": false
+                    ]
                 }
             }
         }, logger, function() {
@@ -82,7 +82,7 @@ describe('Token verification', function () {
         done();
     });
 
-    function createJwtToken(req) {
+    function createJwtToken(req, secret) {
         var jwtPayload = {
             "sub": USER_ID,
             "iss": helper.installedPayload.clientKey,
@@ -94,7 +94,7 @@ describe('Token verification', function () {
             jwtPayload.qsh = jwt.createQueryStringHash(req);
         }
 
-        return jwt.encode(jwtPayload, helper.installedPayload.sharedSecret);
+        return jwt.encode(jwtPayload, secret || helper.installedPayload.sharedSecret);
     }
 
     function createRequestOptions(path, jwt) {
@@ -274,6 +274,54 @@ describe('Token verification', function () {
                 jwt.decode(payload.token, helper.installedPayload.sharedSecret);
                 done();
             });
+        });
+    });
+
+    it('should check for a token on reinstall', function (done) {
+        request({
+            url: helper.addonBaseUrl + '/installed',
+            method: 'POST',
+            json: helper.installedPayload
+        }, function (err, res, body) {
+            assert.equal(res.statusCode, 401, "re-installation not verified");
+            done();
+        });
+    });
+
+    it('should validate token using old secret on reinstall', function (done) {
+        request({
+            url: helper.addonBaseUrl + '/installed',
+            method: 'POST',
+            json: _.extend({}, helper.installedPayload),
+            headers: {
+                'Authorization': 'JWT ' + createJwtToken({
+                    method: 'POST',
+                    path: '/installed'
+                })
+            }
+        }, function (err, res, body) {
+            assert.equal(err, null);
+            assert.equal(res.statusCode, 204, "signed reinstall request not accepted");
+            done();
+        });
+    });
+
+    it('should not accept reinstall request signed with new secret', function (done) {
+        var newSecret = 'newSharedSecret';
+        request({
+            url: helper.addonBaseUrl + '/installed',
+            method: 'POST',
+            json: _.extend({}, helper.installedPayload, {sharedSecret: newSecret}),
+            headers: {
+                'Authorization': 'JWT ' + createJwtToken({
+                    method: 'POST',
+                    path: '/installed'
+                }, newSecret)
+            }
+        }, function (err, res, body) {
+            assert.equal(err, null);
+            assert.equal(res.statusCode, 400, "reinstall request signed with old request was accepted");
+            done();
         });
     });
 

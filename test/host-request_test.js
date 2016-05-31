@@ -6,7 +6,7 @@ var app = express();
 var ac = require('../index');
 var request = require('request');
 var moment = require('moment');
-var jwt = require('../lib/internal/jwt');
+var jwt = require('atlassian-jwt');
 var hostRequest = require('../lib/internal/host-request');
 var logger = require('./logger');
 var addon = {};
@@ -111,6 +111,24 @@ describe('Host Request', function () {
             done();
         }, function (request) {
             throw "failed";
+        });
+    });
+
+    it('get request has user-agent header', function (done) {
+        httpClient.get('/some/path/on/host').then(function(request) {
+            assert.equal(request.headers['User-Agent'].indexOf('atlassian-connect-express/'), 0);
+            done();
+        });
+    });
+
+    it('get request has user-agent version set to package version', function (done) {
+        var aceVersion = require('../package.json').version;
+        httpClient.get('/some/path/on/host').then(function(request) {
+            var userAgentArr = request.headers['User-Agent'].split('/');
+            assert.equal(userAgentArr.length, 2);
+            assert.equal(userAgentArr[0], 'atlassian-connect-express');
+            assert.equal(userAgentArr[1], aceVersion);
+            done();
         });
     });
 

@@ -101,6 +101,8 @@ comments to help you understand available settings.
 * `./atlassian-connect.json` -- This file is a manifest of all the extension points your add-on uses. To see all of the
 available extension point options, check out the modules sections of the [atlassian-connect documentation](https://developer.atlassian.com/static/connect/docs/).
 
+The behaviour of your add-on can be further configured by setting the `AC_OPTS` environment variable (see the end of this section).
+
 #### config.json
 
 The `./config.json` file contains all of the settings for the add-on server. This file is broken into environments.
@@ -206,6 +208,24 @@ The `./config.json` file contains all of the settings for the add-on server. Thi
       }
     }
 ```
+
+#### AC_OPTS
+
+The AC_OPTS environment variable can be used to change the behaviour of ACE for ease of development, like so:
+
+```
+AC_OPTS=no-auth,force-reg node app.js
+```
+
+Set it to a space- or comma-delimited list containing one or more of the following values.
+
+**force-reg** Make the add-on always register itself with running JIRAs & Confluences when it starts up (normally auto-registration only happens if the add-on is using a memory store).
+
+**force-dereg** Make the add-on always de-register itself with running JIRAs & Confluences on shutdown (normally auto-registration only happens if the add-on is using a memory store or running in development mode).
+
+**no-reg** Make the add-on never register itself with running JIRAs & Confluences (i.e. don't auto-register even if a memory store is being used).
+
+**no-auth** Skip authentication of incoming requests (i.e. don't check for or validate JWT tokens).
 
 ### atlassian-connect.json
 
