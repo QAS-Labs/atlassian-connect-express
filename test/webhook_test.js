@@ -2,6 +2,7 @@ var helper = require('./test_helper');
 var assert = require('assert');
 var http = require('http');
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
 var ac = require('../index');
 var request = require('request');
@@ -22,8 +23,8 @@ describe('Webhook', function () {
         });
 
         app.set('env', 'development');
-        app.use(express.urlencoded());
-        app.use(express.json());
+        app.use(bodyParser.urlencoded({extended: false}));
+        app.use(bodyParser.json());
 
         var installedPayload = helper.installedPayload;
         installedPayload.baseUrl = "http://admin:admin@localhost:3003";
@@ -44,11 +45,6 @@ describe('Webhook', function () {
 
         var host = express();
         // mock host
-        host.get('/plugins/servlet/oauth/consumer-info', function (req, res) {
-            res.set('Content-Type', 'application/xml');
-            res.status(200).send(helper.consumerInfo);
-        });
-
         host.head("/rest/plugins/1.0/", function (req, res) {
             res.setHeader("upm-token", "123");
             res.status(200).end();
@@ -90,7 +86,7 @@ describe('Webhook', function () {
         var jwtPayload = {
             "iss": helper.installedPayload.clientKey,
             "iat": moment().utc().unix(),
-            "exp": moment().utc().add('minutes', 10).unix()
+            "exp": moment().utc().add(10, 'minutes').unix()
         };
 
         if (req) {
@@ -103,8 +99,8 @@ describe('Webhook', function () {
     function createExpiredJwtToken(req) {
         var jwtPayload = {
             "iss": helper.installedPayload.clientKey,
-            "iat": moment().utc().subtract('minutes', 20).unix(),
-            "exp": moment().utc().subtract('minutes', 10).unix()
+            "iat": moment().utc().subtract(20, 'minutes').unix(),
+            "exp": moment().utc().subtract(10, 'minutes').unix()
         };
 
         if (req) {

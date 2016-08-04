@@ -2,6 +2,7 @@ var helper = require('./test_helper');
 var assert = require('assert');
 var http = require('http');
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
 var ac = require('../index');
 var request = require('request');
@@ -16,14 +17,8 @@ describe('Auto registration (UPM)', function () {
 
     before(function (done) {
         app.set('env', 'development');
-        app.use(express.urlencoded());
-        app.use(express.json());
-
-        // mock host
-        app.get('/confluence/plugins/servlet/oauth/consumer-info', function (req, res) {
-            res.set('Content-Type', 'application/xml');
-            res.status(200).send(helper.consumerInfo);
-        });
+        app.use(bodyParser.urlencoded({extended: false}));
+        app.use(bodyParser.json());
 
         app.head("/rest/plugins/1.0/", function (req, res) {
             res.setHeader("upm-token", "123");
@@ -79,7 +74,7 @@ describe('Auto registration (UPM)', function () {
         var jwtPayload = {
             "iss": helper.installedPayload.clientKey,
             "iat": moment().utc().unix(),
-            "exp": moment().utc().add('minutes', 10).unix()
+            "exp": moment().utc().add(10, 'minutes').unix()
         };
 
         return jwt.encode(jwtPayload, helper.installedPayload.sharedSecret);
@@ -109,33 +104,5 @@ describe('Auto registration (UPM)', function () {
             eventFired(timer, done);
         });
     });
-
-//    it('should also deregister if a SIGINT is encountered', function (done) {
-//        // first sigint will be us testing deregistration
-//        function trap() {
-//            // second sigint will be deregistration sending another to kill the process after
-//            // it completes it's work; we don't want the tests to exit, so we'll no-op that
-//            process.once('SIGINT', function () {
-//                // a third sigint can occur on test failures (why?), so this ensures that we see
-//                // the full error emitted before the tests terminate
-//                process.once('SIGINT', function () {
-//                    process.once('SIGINT', function () {
-//                    });
-//                });
-//            });
-//        }
-//
-//        process.once('SIGINT', trap);
-//        process.kill(process.pid, 'SIGINT');
-//        var timer = testIfEventCalled();
-//        addon.on('addon_deregistered', function () {
-//            eventFired(timer, done, function () {
-//                addon.settings.get(helper.installedPayload.clientKey).then(function (settings) {
-//                    assert(!settings, 'settings not deleted: ' + require('util').inspect(settings));
-//                    done();
-//                });
-//            });
-//        });
-//    });
 
 });
