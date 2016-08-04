@@ -145,7 +145,7 @@ The `./config.json` file contains all of the settings for the add-on server. Thi
         //
         // To specify a backend for JugglingDB other than "sqlite", set the
         // "type" value to one of JugglingDB's other supported types.  See
-        // https://github.com/1602/jugglingdb for more information.
+        // http://1602.github.io/jugglingdb for more information.
         //
         // To use your own storage adapter, add the key
         // "adapter" to the following configuration, and replace "type" and
