@@ -27,7 +27,7 @@ describe('Token verification', function () {
 
         // configure test store
         ac.store.register("teststore", function (logger, opts) {
-            return require("../lib/store/sequelize")(logger, opts);
+            return require("../lib/store/jugglingdb")(logger, opts);
         });
 
         // configure add-on
@@ -36,8 +36,7 @@ describe('Token verification', function () {
                 "development": {
                     store: {
                         adapter: 'teststore',
-                        type: "sqlite",
-                        storage: ':memory:'
+                        type: 'memory'
                     },
                     "hosts": [
                         helper.productBaseUrl

@@ -43,7 +43,7 @@ describe('Auto registration (UPM)', function () {
         });
 
         ac.store.register("teststore", function (logger, opts) {
-            return require("../lib/store/sequelize")(logger, opts);
+            return require("../lib/store/jugglingdb")(logger, opts);
         });
 
         addon = ac(app, {
@@ -51,8 +51,7 @@ describe('Auto registration (UPM)', function () {
                 "development": {
                     store: {
                         adapter: 'teststore',
-                        type: 'sqlite',
-                        storage: ':memory:'
+                        type: 'memory'
                     },
                     "hosts": [
                         helper.productBaseUrl

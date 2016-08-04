@@ -141,10 +141,10 @@ The `./config.json` file contains all of the settings for the add-on server. Thi
         // atlassian-connect-express currently integrates with JugglingDB for persistence
         // to store the host client information (i.e., client key, host public
         // key, etc). When no adapter is specified, it defaults to JugglingDB's
-        // sqlite storage.
+        // fallback memory storage.
         //
-        // To specify a backend for JugglingDB other than "sqlite", set the
-        // "type" value to one of JugglingDB's other supported types.  See
+        // To specify a backend for JugglingDB other than "memory", set the
+        // "type" value to one of JugglingDB's other supported types. See
         // http://1602.github.io/jugglingdb for more information.
         //
         // To use your own storage adapter, add the key
