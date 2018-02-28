@@ -1,14 +1,14 @@
 {
-  "name": "atlassian-connect-express",
+  "name": "@qasymphony/atlassian-connect-express",
   "version": "2.1.4",
   "description": "Library for building Atlassian Add-ons on top of Express",
   "author": "Atlassian",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "http://bitbucket.org/atlassian/atlassian-connect-express"
+    "url": "https://github.com/QAS-Labs/atlassian-connect-express"
   },
-  "homepage": "https://bitbucket.org/atlassian/atlassian-connect-express",
+  "homepage": "https://github.com/QAS-Labs/atlassian-connect-express",
   "keywords": [
     "atlassian",
     "plugins",
