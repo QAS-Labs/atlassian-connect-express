@@ -40,7 +40,7 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "extend": "^3.0.1",
-    "jugglingdb-sqlite3": "^1.0.0",
+    "@pulse/jugglingdb-sqlite3": "0.1.1",
     "mocha": "^5.0.0",
     "ngrok": "^2.2.25",
     "nock": "^9.1.6",
